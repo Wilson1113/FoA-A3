@@ -90,6 +90,7 @@ class BinarySearchTree(Generic[K, I]):
         """
         if current is None:  # base case: at the leaf
             current = TreeNode(key, item=item)
+            current.subtree_size = 0
             self.length += 1
         elif key < current.key:
             current.left = self.insert_aux(current.left, key, item)
@@ -97,6 +98,7 @@ class BinarySearchTree(Generic[K, I]):
             current.right = self.insert_aux(current.right, key, item)
         else:  # key == current.key
             raise ValueError('Inserting duplicate item')
+        current.subtree_size += 1
         return current
 
     def __delitem__(self, key: K) -> None:
@@ -130,7 +132,7 @@ class BinarySearchTree(Generic[K, I]):
             current.key  = succ.key
             current.item = succ.item
             current.right = self.delete_aux(current.right, succ.key)
-
+        current.subtree_size -= 1
         return current
 
     def get_successor(self, current: TreeNode) -> TreeNode:
@@ -139,13 +141,22 @@ class BinarySearchTree(Generic[K, I]):
             It should be a child node having the smallest key among all the
             larger keys.
         """
-        raise NotImplementedError()
+        if self.is_leaf(current) or current.right is None:
+            return None
+        return self.get_successor_aux(current.right)
+
+    def get_successor_aux(self, current):
+        if self.is_leaf(current):
+            return current
+        return self.get_minimal(current.left)
 
     def get_minimal(self, current: TreeNode) -> TreeNode:
         """
             Get a node having the smallest key in the current sub-tree.
         """
-        raise NotImplementedError()
+        if self.is_leaf(current):
+            return current
+        return self.get_minimal(current.left)
 
     def is_leaf(self, current: TreeNode) -> bool:
         """ Simple check whether or not the node is a leaf. """
@@ -176,4 +187,10 @@ class BinarySearchTree(Generic[K, I]):
         """
         Finds the kth smallest value by key in the subtree rooted at current.
         """
-        raise NotImplementedError()
+        if self.is_leaf(current):
+            return current
+        if current.left is not None and current.left.subtree_size >= k:
+            return self.kth_smallest(k, current.left)
+        if current.left is None and k == 1 or current.left.subtree_size + 1 == k:
+            return current
+        return self.kth_smallest(k-current.left.subtree_size-1, current.right)
