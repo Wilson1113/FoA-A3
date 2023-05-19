@@ -191,6 +191,6 @@ class BinarySearchTree(Generic[K, I]):
             return current
         if current.left is not None and current.left.subtree_size >= k:
             return self.kth_smallest(k, current.left)
-        if current.left is None and k == 1 or current.left.subtree_size + 1 == k:
+        if current.left is None and k == 1 or current.left is not None and current.left.subtree_size + 1 == k:
             return current
         return self.kth_smallest(k-current.left.subtree_size-1, current.right)
