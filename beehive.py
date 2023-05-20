@@ -31,12 +31,12 @@ class Beehive:
 class BeehiveSelector:
 
     def __init__(self, max_beehives: int):
+        self.capacity = max_beehives
         self.store = MaxHeap(max_beehives)
 
     def set_all_beehives(self, hive_list: list[Beehive]):
         self.store = MaxHeap(self.capacity)
-        for hive in hive_list:
-            self.store.add(hive) # O(log n) :(
+        self.store.heapify(hive_list) # O(n)
 
     def add_beehive(self, hive: Beehive):
         self.store.add(hive) # O(log n) :)

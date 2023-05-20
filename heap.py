@@ -82,6 +82,19 @@ class MaxHeap(Generic[T]):
             self.sink(1)
         return max_elt
 
+    def heapify(self, a_list):
+        """
+        A function that construct heap from bottom up.
+
+        Complexity:
+            O(N)
+        """
+        for i in range(len(a_list)):
+            self.the_array[i+1] = a_list[i]
+
+        for i in range(len(a_list)//2, 0, -1):
+            self.sink(i)
+
 if __name__ == '__main__':
     items = [ int(x) for x in input('Enter a list of numbers: ').strip().split() ]
     heap = MaxHeap(len(items))
