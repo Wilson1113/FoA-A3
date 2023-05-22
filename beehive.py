@@ -22,9 +22,17 @@ class Beehive:
         self.volume = volume
 
     def __le__(self, other):
+        """
+        Comparison function less or equal
+        Complexity: O(1)
+        """
         return min(self.capacity, self.volume)*self.nutrient_factor <= min(other.capacity, other.volume)*other.nutrient_factor
 
     def __gt__(self, other):
+        """
+        Comparison function greater
+        Complexity: O(1)
+        """
         return min(self.capacity, self.volume)*self.nutrient_factor > min(other.capacity, other.volume)*other.nutrient_factor
 
 
@@ -35,13 +43,49 @@ class BeehiveSelector:
         self.store = MaxHeap(max_beehives)
 
     def set_all_beehives(self, hive_list: list[Beehive]):
+        """
+        Set all beehive into storage
+
+        - Args:
+            - list[Beehive]: a list of beehive to be stored
+        - Returns:
+            - None
+        - Raises:
+            -None
+        - Complexity:
+            O(n) where n is the length of given list of beehive
+        """
         self.store = MaxHeap(self.capacity)
         self.store.heapify(hive_list) # O(n)
 
     def add_beehive(self, hive: Beehive):
-        self.store.add(hive) # O(log n) :)
+        """
+        Add given beehive into storage
+
+        - Args:
+            - Beehive: beehive to be stored
+        - Returns:
+            - None
+        - Raises:
+            -None
+        - Complexity:
+            O(log n) where n is the current length of self.store
+        """
+        self.store.add(hive)  # O(log n) :)
     
     def harvest_best_beehive(self):
+        """
+        Returns the value can be harvested.
+
+        - Args:
+            - None
+        - Returns:
+            - int: the total value harvested
+        - Raises:
+            -None
+        - Complexity:
+            O(n log n) where n is the current length of self.store
+        """
         best: Beehive = self.store.get_max() # O(log n) :)
         value = min(best.capacity, best.volume)
         best.volume -= value

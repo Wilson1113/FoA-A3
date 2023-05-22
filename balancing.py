@@ -6,7 +6,7 @@ from ratio import Percentiles
 def make_ordering(my_coordinate_list: list[Point]) -> list[Point]:
     copy = sorted(my_coordinate_list)
     result = []
-    make_ordering_aux(copy, result)
+    make_ordering_aux(copy, result) # O(n log n)
     return result
 
 
@@ -21,11 +21,12 @@ def make_ordering_aux(lst, result):
 
             child_list = split_list(lst, point)
 
-            for sub_list in child_list:
+            for sub_list in child_list: # n log n/8 call
                 make_ordering_aux(sub_list, result)
 
 
 def get_root(copy):
+    # n log n
     p = Percentiles()
     py = Percentiles()
     pz = Percentiles()

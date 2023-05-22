@@ -140,19 +140,32 @@ class BinarySearchTree(Generic[K, I]):
             Get successor of the current node.
             It should be a child node having the smallest key among all the
             larger keys.
+
+        - Args:
+            - TreeNode: the node to be searched
+        - Returns:
+            - TreeNode | None: the child node having smallest key
+        - Raises:
+            -None
+        - Complexity:
+            O(D) where D is the maximum depth of given node
         """
         if self.is_leaf(current) or current.right is None:
             return None
-        return self.get_successor_aux(current.right)
-
-    def get_successor_aux(self, current):
-        if self.is_leaf(current):
-            return current
-        return self.get_minimal(current.left)
+        return self.get_minimal(current.right)
 
     def get_minimal(self, current: TreeNode) -> TreeNode:
         """
             Get a node having the smallest key in the current sub-tree.
+
+        - Args:
+            - TreeNode: current node
+        - Returns:
+            - TreeNode: the minimum node
+        - Raises:
+            -None
+        - Complexity:
+            O(D) where D is the maximum depth of given node
         """
         if self.is_leaf(current):
             return current
@@ -186,6 +199,15 @@ class BinarySearchTree(Generic[K, I]):
     def kth_smallest(self, k: int, current: TreeNode) -> TreeNode:
         """
         Finds the kth smallest value by key in the subtree rooted at current.
+
+        - Args:
+            - TreeNode: current node
+        - Returns:
+            - TreeNode: the node which is k th smallest
+        - Raises:
+            -None
+        - Complexity:
+            O(D) where D is the maximum depth of given node
         """
         if self.is_leaf(current):
             return current

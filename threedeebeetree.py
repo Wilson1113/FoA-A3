@@ -84,6 +84,18 @@ class ThreeDeeBeeTree(Generic[I]):
         return node.item
 
     def get_tree_node_by_key(self, key: Point) -> BeeNode:
+        """
+        Returns the child node where key = given key.
+
+        - Args:
+            - Point: key to search
+        - Returns:
+            - BeeNode: where key = given key
+        - Raises:
+            -KeyError: when key is not found in the tree
+        - Complexity:
+            O(D) where D is the maximum depth of root
+        """
         current = self.root
         while current:
             if current.key == key:
@@ -97,6 +109,17 @@ class ThreeDeeBeeTree(Generic[I]):
     def insert_aux(self, current: BeeNode, key: Point, item: I) -> BeeNode:
         """
             Attempts to insert an item into the tree, it uses the Key to insert it
+
+        - Args:
+            - BeeNode: current root
+            - Point: key to be inserted
+            - I: item to be inserted
+        - Returns:
+            - BeeNode: the updated current
+        - Raises:
+            -None
+        - Complexity:
+            O(D) where D is the maximum depth of root
         """
         if not current:
             self.length += 1
@@ -107,11 +130,22 @@ class ThreeDeeBeeTree(Generic[I]):
         else:
             index = current.compare(key)
             current.children[index] = self.insert_aux(current.children[index], key, item)
-            current.subtree_size = sum([child.subtree_size for child in current.children if child]) + 1
+            current.subtree_size = sum([child.subtree_size for child in current.children if child]) + 1  # O(1): always loop 8 times
             return current
 
     def is_leaf(self, current: BeeNode) -> bool:
-        """ Simple check whether or not the node is a leaf. """
+        """
+        Simple check whether or not the node is a leaf.
+
+        - Args:
+            - BeeNode: node to be checked
+        - Returns:
+            - bool: indicates whether given node is a leaf
+        - Raises:
+            -None
+        - Complexity:
+            O(1) we know it has maximum of 8 children
+        """
         for child in current.children:
             if not child:
                 return False
