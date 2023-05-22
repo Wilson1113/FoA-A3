@@ -22,7 +22,7 @@ class BeeNode:
         index = self.compare(point)
         return self.children[index]
 
-    def compare(self, point2: Point):
+    def compare(self, point2: Point) -> int:
         """
         Helper function determine the index after comparison
 
