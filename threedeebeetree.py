@@ -23,17 +23,26 @@ class BeeNode:
         return self.children[index]
 
     def compare(self, point2: Point):
+        """
+        Helper function determine the index after comparison
+
+        - Args:
+            - Point: point to compare
+        - Returns:
+            - int: index where should the point2 go if it is a child
+        - Raises:
+            -None
+        - Complexity:
+            O(1)
+        """
         # Order: ggg, ggl, glg, gll, lgg, lgl, llg, lll
         result = 0
         # Case: l__
-        if self.key[0] > point2[0]:
-            result += 1 << 2
+        result += int(self.key[0] > point2[0]) << 2
         # Case: _l_
-        if self.key[1] > point2[1]:
-            result += 1 << 1
+        result += int(self.key[1] > point2[1]) << 1
         # Case: __l
-        if self.key[2] > point2[2]:
-            result += 1 << 0
+        result += int(self.key[2] > point2[2]) << 0
         return result
 
 class ThreeDeeBeeTree(Generic[I]):
