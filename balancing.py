@@ -93,7 +93,7 @@ def get_root(copy: list[Point]) -> Point:
 def split_list(lst, point: Point) -> list[list]:
     """
     Split one list into 8 sublist based on ggg, ggl, glg, gll, lgg, lgl, llg, lll compare to point.
-    where g is greater l is litter
+    where g is greater l is less
 
     - Args:
         - point: point to compare
