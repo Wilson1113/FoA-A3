@@ -16,9 +16,8 @@ def make_ordering(my_coordinate_list: list[Point]) -> list[Point]:
 
     :complexity: O(N*logN) where N is the length of list
     """
-    copy = sorted(my_coordinate_list)
     result = []
-    make_ordering_aux(copy, result)  # O(n log n)
+    make_ordering_aux(my_coordinate_list, result)  # O(n log n)
     return result
 
 

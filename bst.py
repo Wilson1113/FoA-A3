@@ -8,10 +8,10 @@ from __future__ import annotations
 __author__ = 'Brendon Taylor, modified by Alexey Ignatiev, further modified by Jackson Goerner'
 __docformat__ = 'reStructuredText'
 
+from math import ceil
 from typing import TypeVar, Generic
 from node import TreeNode
 import sys
-
 
 # generic types
 K = TypeVar('K')
@@ -113,7 +113,7 @@ class BinarySearchTree(Generic[K, I]):
         if current is None:  # key not found
             raise ValueError('Deleting non-existent item')
         elif key < current.key:
-            current.left  = self.delete_aux(current.left, key)
+            current.left = self.delete_aux(current.left, key)
         elif key > current.key:
             current.right = self.delete_aux(current.right, key)
         else:  # we found our key => do actual deletion
@@ -129,7 +129,7 @@ class BinarySearchTree(Generic[K, I]):
 
             # general case => find a successor
             succ = self.get_successor(current)
-            current.key  = succ.key
+            current.key = succ.key
             current.item = succ.item
             current.right = self.delete_aux(current.right, succ.key)
         current.subtree_size -= 1
@@ -190,7 +190,7 @@ class BinarySearchTree(Generic[K, I]):
             print('{0}{1}'.format(real_prefix, str(current.key)), file=to)
 
             if current.left or current.right:
-                self.draw_aux(current.left,  prefix=prefix + '\u2551 ', final='\u255f\u2500', to=to)
+                self.draw_aux(current.left, prefix=prefix + '\u2551 ', final='\u255f\u2500', to=to)
                 self.draw_aux(current.right, prefix=prefix + '  ', final='\u2559\u2500', to=to)
         else:
             real_prefix = prefix[:-2] + final
@@ -209,13 +209,60 @@ class BinarySearchTree(Generic[K, I]):
         - Complexity:
             O(D) where D is the maximum depth of given node
         """
-        if self.is_leaf(current):
+        if current is None:
+            return None
+
+        left_size = current.left.subtree_size if current.left else 0
+
+        if k == left_size + 1:
             return current
-        if current.left is not None and current.left.subtree_size >= k:
+        elif k <= left_size:
             return self.kth_smallest(k, current.left)
-        if current.left is None and k == 1 or current.left is not None and current.left.subtree_size + 1 == k:
-            return current
+        else:
+            return self.kth_smallest(k - left_size - 1, current.right)
 
-        subtree_size = 0 if current.left is None else current.left.subtree_size
+    def ratio(self, x: int, y: int) -> list[int]:
+        """
+        Function returns the range of T with specific ratio.
 
-        return self.kth_smallest(k-subtree_size-1, current.right)
+        - Args:
+            - int: specific the T has to be greater than x% amongst them
+            - int: specific the T has to be less than y% amongst them
+        - Returns:
+            - list: element within the ratio
+        - Raises:
+            -None
+        - Complexity:
+            O(logn + O) where n is the number of node and O is the length of return list
+        """
+        lb = ceil(x / 100 * self.length) + 1
+        ub = self.length - ceil(y / 100 * self.length)
+        lnode = self.kth_smallest(lb, self.root)
+        unode = self.kth_smallest(ub, self.root)
+        result = []
+        self.ratio_helper(self.root, result, lnode, unode)
+        return result
+
+    def ratio_helper(self, current: TreeNode, result: list, x: TreeNode, y: TreeNode) -> None:
+        """
+        Helper function of ratio.
+
+        - Args:
+            - current: current node is processing
+            - result: the list has to be return
+            - x: the lower bound of all node
+            - y: the upper bound of all node
+        - Returns:
+            - None
+        - Raises:
+            -None
+        - Complexity:
+            O(O) O is the length of return list
+        """
+        if current:
+            if current is not x:
+                self.ratio_helper(current.left, result, x, y)
+            if x and y and x.item <= current.item <= y.item:
+                result.append(current.key)
+            if current is not y:
+                self.ratio_helper(current.right, result, x, y)
