@@ -36,14 +36,8 @@ class BeeNode:
             O(1)
         """
         # Order: ggg, ggl, glg, gll, lgg, lgl, llg, lll
-        result = 0
-        # Case: l__
-        result += int(self.key[0] > point2[0]) << 2
-        # Case: _l_
-        result += int(self.key[1] > point2[1]) << 1
-        # Case: __l
-        result += int(self.key[2] > point2[2]) << 0
-        return result
+        # l__, _l_, __l
+        return int(self.key[0] > point2[0]) << 2 + int(self.key[1] > point2[1]) << 1 + int(self.key[2] > point2[2]) << 0
 
 class ThreeDeeBeeTree(Generic[I]):
     """ 3️⃣🇩🐝🌳 tree. """
