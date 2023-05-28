@@ -53,7 +53,7 @@ class Percentiles(Generic[T]):
         """
         del self.store[item]
 
-    def ratio(self, x, y):
+    def ratio(self, x: int, y: int) -> list[int]:
         """
         Function returns the range of T with specific ratio.
 
@@ -65,7 +65,7 @@ class Percentiles(Generic[T]):
         - Raises:
             -None
         - Complexity:
-            O(1)
+            O()
         """
         return self.store.ratio(x,y)
 
