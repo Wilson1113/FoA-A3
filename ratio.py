@@ -21,32 +21,7 @@ class Percentiles(Generic[T]):
         - Complexity:
             O(1)
         """
-        self.store = list()
-
-    def binary_search(self, item):
-        """
-        Binary search function.
-
-        - Args:
-            - T: item to be search
-        - Returns:
-            - int: index to be insert or found
-        - Raises:
-            -None
-        - Complexity:
-            O(log n) where n is the length of self.store
-        """
-        lb = 0
-        ub = len(self.store) - 1
-        while lb <= ub:
-            mid = (lb+ub)//2
-            if self.store[mid] == item:
-                return mid
-            elif self.store[mid] > item:
-                ub = mid - 1
-            else:
-                lb = mid + 1
-        return lb
+        self.store = BinarySearchTree()
     
     def add_point(self, item: T):
         """
@@ -61,7 +36,7 @@ class Percentiles(Generic[T]):
         - Complexity:
             O(log n) where n is the length of self.store
         """
-        self.store.insert(self.binary_search(item), item)
+        self.store[item] = item
     
     def remove_point(self, item: T):
         """
@@ -76,7 +51,7 @@ class Percentiles(Generic[T]):
         - Complexity:
             O(log n) where n is the length of self.store
         """
-        del self.store[self.binary_search(item)]
+        del self.store[item]
 
     def ratio(self, x, y):
         """
@@ -94,7 +69,15 @@ class Percentiles(Generic[T]):
         """
         lb = ceil(x/100*len(self.store))
         ub = len(self.store) - ceil(y/100*len(self.store))
-        return self.store[lb:ub]
+        first = self.store.kth_smallest(lb, self.store.root)
+        O = ub-lb
+        current = self.store.root
+        while current is not None and O > 0:
+
+    def ratio_aux(self, current, first, last, k, lst):
+        if k<=0:
+            return
+
 
 if __name__ == "__main__":
     points = list(range(50))
