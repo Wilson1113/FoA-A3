@@ -8,10 +8,10 @@ from __future__ import annotations
 __author__ = 'Brendon Taylor, modified by Alexey Ignatiev, further modified by Jackson Goerner'
 __docformat__ = 'reStructuredText'
 
+from math import ceil
 from typing import TypeVar, Generic
 from node import TreeNode
 import sys
-
 
 # generic types
 K = TypeVar('K')
@@ -113,7 +113,7 @@ class BinarySearchTree(Generic[K, I]):
         if current is None:  # key not found
             raise ValueError('Deleting non-existent item')
         elif key < current.key:
-            current.left  = self.delete_aux(current.left, key)
+            current.left = self.delete_aux(current.left, key)
         elif key > current.key:
             current.right = self.delete_aux(current.right, key)
         else:  # we found our key => do actual deletion
@@ -129,7 +129,7 @@ class BinarySearchTree(Generic[K, I]):
 
             # general case => find a successor
             succ = self.get_successor(current)
-            current.key  = succ.key
+            current.key = succ.key
             current.item = succ.item
             current.right = self.delete_aux(current.right, succ.key)
         current.subtree_size -= 1
@@ -190,7 +190,7 @@ class BinarySearchTree(Generic[K, I]):
             print('{0}{1}'.format(real_prefix, str(current.key)), file=to)
 
             if current.left or current.right:
-                self.draw_aux(current.left,  prefix=prefix + '\u2551 ', final='\u255f\u2500', to=to)
+                self.draw_aux(current.left, prefix=prefix + '\u2551 ', final='\u255f\u2500', to=to)
                 self.draw_aux(current.right, prefix=prefix + '  ', final='\u2559\u2500', to=to)
         else:
             real_prefix = prefix[:-2] + final
@@ -218,4 +218,21 @@ class BinarySearchTree(Generic[K, I]):
 
         subtree_size = 0 if current.left is None else current.left.subtree_size
 
-        return self.kth_smallest(k-subtree_size-1, current.right)
+        return self.kth_smallest(k - subtree_size - 1, current.right)
+
+    def ratio(self, x, y):
+        lb = ceil(x / 100 * self.length)
+        ub = self.length - ceil(y / 100 * self.length)
+        result = [-1]
+        self.ratio_helper(self.root, result, lb, ub)
+        return result[1:]
+
+    def ratio_helper(self, current: TreeNode, result, x, y):
+        if current:
+            self.ratio_helper(current.left, result, x, y)
+            result[0] += 1
+            if result[0] < y:
+                if result[0] >= x:
+                    result.append(current.key)
+                self.ratio_helper(current.right, result, x, y)
+
